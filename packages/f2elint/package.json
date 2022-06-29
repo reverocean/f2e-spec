@@ -8,7 +8,7 @@
     "dev": "npm run copyfiles && tsc -w",
     "build": "npm run copyfiles && tsc ",
     "copyfiles": "copyfiles -a -u 1 \"src/config/**\" lib",
-    "link": "npm run build && npm link && npm link -g f2elint",
+    "link": "npm run build && npm link && npm link -l f2elint",
     "test": "npm run build && jest",
     "coverage": "nyc jest --silent --forceExit",
     "prepublishOnly": "npm run test"
