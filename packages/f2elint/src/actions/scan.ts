@@ -17,10 +17,11 @@ import type { ScanOptions, ScanResult, PKG, Config, ScanReport } from '../types'
 
 export default async (options: ScanOptions): Promise<ScanReport> => {
   const { cwd, include, quiet, fix, outputReport } = options;
-  const getLintFiles = (ext: string[]): string | string[] => {
+  const getLintFiles = (ext: string[], needPattern: Boolean = false): string | string[] => {
     const { files } = options;
     if (files) return files.filter((name) => ext.includes(path.extname(name)));
     const pattern = `**/*.{${ext.map((t) => t.replace(/^\./, '')).join(',')}}`;
+    if(needPattern) return pattern;
     return path.resolve(cwd, include, pattern);
   };
   const readConfigFile = (pth: string): any => {
@@ -42,8 +43,8 @@ export default async (options: ScanOptions): Promise<ScanReport> => {
         });
     for (const filepath of files) {
       const text = fs.readFileSync(filepath, 'utf8');
-      const options = await prettier.resolveConfig(filepath);
-      const formatted = prettier.format(text, { ...options, filepath });
+      const prettierOptions = await prettier.resolveConfig(filepath);
+      const formatted = prettier.format(text, { ...prettierOptions, filepath });
       fs.writeFileSync(filepath, formatted, 'utf8');
     }
   }
@@ -62,7 +63,7 @@ export default async (options: ScanOptions): Promise<ScanReport> => {
   // stylelint
   if (config.enableStylelint !== false) {
     try {
-      const files = getLintFiles(STYLELINT_FILE_EXT);
+      const files = getLintFiles(STYLELINT_FILE_EXT, true);
       const data = await stylelint.lint({
         ...stylelint.getLintConfig(options, pkg, config),
         files,
