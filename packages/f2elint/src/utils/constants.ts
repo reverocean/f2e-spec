@@ -69,6 +69,10 @@ export const PROJECT_TYPES: Array<{ name: string; value: string }> = [
     name: '使用 ES5 及之前版本 JavaScript 的老项目',
     value: 'es5',
   },
+  {
+    name: '微信小程序的项目',
+    value: 'wx',
+  },
 ];
 
 /**

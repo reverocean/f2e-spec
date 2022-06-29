@@ -1,6 +1,10 @@
 module.exports = {
   extends: [
-    '<%= eslintType === 'index' ? 'eslint-config-ali' : `eslint-config-ali/${eslintType}` %>',
+    <%_ if(eslintType === 'index' || eslintType === 'wx') { _%>
+    'eslint-config-ali',
+    <%_ } else { _%>
+    `eslint-config-ali/${eslintType}`,
+    <%_ } _%>
     <%_ if (enablePrettier) { _%>
     'prettier',
     <%_ if (/typescript/.test(eslintType)) { _%>
@@ -14,4 +18,16 @@ module.exports = {
     <%_ } _%>
     <%_ } _%>
   ],
+  <%_ if(eslintType === 'wx') { _%>
+    globals: {
+      wx: true,
+      App: true,
+      Page: true,
+      getCurrentPages: true,
+      getApp: true,
+      Component: true,
+      requirePlugin: true,
+      requireMiniProgram: true,
+    },
+  <%_ } _%>
 };
