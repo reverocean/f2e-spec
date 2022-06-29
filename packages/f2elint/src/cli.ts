@@ -46,6 +46,10 @@ program
   .command('init')
   .description('一键接入：为项目初始化规约工具和配置，可以根据项目类型和需求进行定制')
   .option('--vscode', '写入.vscode/setting.json配置')
+  .option('-t --eslintType <value>', '项目类型')
+  .option('-es --enableStylelint', 'Enable Stylelint')
+  .option('-em --enableMarkdownlint', 'Enable Markdownlint')
+  .option('-ep --enablePrettier', 'Enable Prettier')
   .action(async (cmd) => {
     if (cmd.vscode) {
       const configPath = path.resolve(cwd, `${PKG_NAME}.config.js`);
@@ -54,6 +58,10 @@ program
       await init({
         cwd,
         checkVersionUpdate: true,
+        eslintType: cmd.eslintType,
+        enableStylelint: Boolean(cmd.enableStylelint),
+        enableMarkdownlint: Boolean(cmd.enableMarkdownlint),
+        enablePrettier: Boolean(cmd.enablePrettier),
       });
     }
   });
